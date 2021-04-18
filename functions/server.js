@@ -1,11 +1,33 @@
 const express = require('express');
 const serverless = require('serverless-http');
 const app = express();
-const path = require('path')
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const mongoose = require("mongoose");
 
-// set the view engine to ejs
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+// set up mongoose
+
+mongoose.connect(
+    'mongodb+srv://MyUsername:MyPassword@mycluster.rkncu.mongodb.net/Mern-auth?retryWrites=true&w=majority',
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+    },
+    (err) => {
+        if (err) throw err;
+        console.log("MongoDB connection established");
+    }
+);
+
+// cors
+app.use(cors())
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 app.use('/', require('./routes/user'))
 
