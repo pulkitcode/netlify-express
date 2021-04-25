@@ -21,7 +21,7 @@ mongoose.connect(
 );
 
 // cors
-app.use(cors())
+app.use(cors({ origin: '*' }))
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
