@@ -125,14 +125,4 @@ router.get("/", auth, async (req, res) => {
 
 /////////////////////////////
 
-// router.get('/', (req, res) => {
-//     res.json({ "HWLLO": "dsasd", "HWLLO": "dsasd", "HWLLO": "dsasd" })
-// })
-
-router.get('/two', (req, res) => {
-    res.json({
-        "two": "2"
-    })
-})
-
 module.exports = router
