@@ -72,36 +72,51 @@ router.post("/register", async (req, res) => {
 ///////////////////////////////////////user login
 
 router.post("/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
+  // * required array
+  let required = [];
 
-    // validate
-    if (!email || !password)
-      return res.status(400).json({ msg: "Not all fields have been entered." });
+  if (!req.body.email) required.push("email");
+  if (!req.body.password) required.push("password");
 
-    const user = await User.findOne({ email: email });
-    if (!user)
-      return res
-        .status(400)
-        .json({ msg: "No account with this email has been registered." });
+  if (required.length === 0) {
+    try {
+      const { email, password } = req.body;
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials." });
+      const user = await User.findOne({ email: email });
+      if (!user)
+        return res
+          .status(400)
+          .json({ msg: "No account with this email has been registered." });
 
-    const token = jwt.sign(
-      { id: user._id },
-      "shhhhhhh its my secret ...... ... .. .",
-      { expiresIn: "1h" }
-    );
-    res.json({
-      token,
-      user: {
-        id: user._id,
-        displayName: user.displayName,
-      },
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch)
+        return res.status(400).json({ msg: "Invalid credentials." });
+
+      const token = jwt.sign(
+        { id: user._id },
+        "shhhhhhh its my secret ...... ... .. .",
+        { expiresIn: "1h" }
+      );
+      res.json({
+        token,
+        user: {
+          id: user._id,
+          displayName: user.displayName,
+        },
+      });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  } else {
+    // * mapping the required array list
+    let message = required.map((item) => {
+      return " " + item;
     });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    return res.status(400).json({
+      status: "fail",
+      message: "Following fields are required - " + message,
+      response: [],
+    });
   }
 });
 
