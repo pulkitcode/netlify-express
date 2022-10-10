@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 // set up mongoose
 
 mongoose.connect(
-    'mongodb+srv://MyUsername:MyPassword@mycluster.rkncu.mongodb.net/Mern-auth?retryWrites=true&w=majority',
+    'mongodbURIHere',
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
